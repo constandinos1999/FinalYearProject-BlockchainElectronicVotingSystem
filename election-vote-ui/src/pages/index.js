@@ -33,10 +33,10 @@ export default function Home() {
           {
             slides.map((idx) => {
               return (
-                <SwiperSlide data-hash={`slide${idx}`} >
+                <SwiperSlide data-hash={`slide${idx}`} key={idx}>
                   <figure className="relative flex justify-center">
                     <img src={`/img/slide/${idx}.jpg`} alt="slide" className="slide-image"/>
-                    <figcaption className="absolute top-1/2 text-yellow-600 text-[70px] font-bold">Blockchain Vote System</figcaption>
+                    <figcaption className="absolute top-1/2 text-gray-600 text-[70px] font-bold">Crypto E-Vote</figcaption>
                   </figure>
                 </SwiperSlide>
               )
