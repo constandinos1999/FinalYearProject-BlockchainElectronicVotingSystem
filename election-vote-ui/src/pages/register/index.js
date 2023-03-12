@@ -1,4 +1,86 @@
+import axios from "axios";
+import { useState } from "react";
+import { Store } from 'react-notifications-component';
+
+const defaultData = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    walletAddress: ""
+};
+
 const Register = () => {
+
+    const [formData, setFormData] = useState(defaultData);
+
+    const updateData = (key, value) => {
+        let _formData = { ...formData };
+        _formData[key] = value;
+        setFormData(_formData);
+    }
+    
+    const connectWallet = async() => {
+        try {
+            if (!window.ethereum) {
+                return;
+            }
+
+            const accounts = await window.ethereum.request({
+                method: "eth_requestAccounts"
+            });
+
+            updateData("walletAddress", accounts[0]);
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
+    const register = async() => {
+        try {
+            await axios.post(
+                `${process.env.REST_API}/register`,
+                {
+                    ...formData
+                }
+            ).then(res => {
+                setFormData(defaultData);
+                const { message } = res.data;
+                Store.addNotification({
+                    title: "Success",
+                    message: message,
+                    type: "success",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 5000,
+                        onScreen: true
+                    }
+                })
+            }).catch(error => {
+                const { message } = error.response.data;
+                Store.addNotification({
+                    title: "Error",
+                    message: message,
+                    type: "danger",
+                    insert: "top",
+                    container: "top-right",
+                    animationIn: ["animate__animated", "animate__fadeIn"],
+                    animationOut: ["animate__animated", "animate__fadeOut"],
+                    dismiss: {
+                        duration: 2000,
+                        onScreen: true
+                    }
+                })
+            })
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
     return (
         <div className="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5">
             <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden max-w-7xl">
@@ -14,48 +96,60 @@ const Register = () => {
                         <div>
                             <div className="flex -mx-3">
                                 <div className="w-1/2 px-3 mb-5">
-                                    <label for="" className="text-xs font-semibold px-1">First name</label>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">First name</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
-                                        <input type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="John"/>
+                                        <input type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="first name" placeholder="John" value={formData.firstName} onChange={(e) => updateData("firstName", e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="w-1/2 px-3 mb-5">
-                                    <label for="" className="text-xs font-semibold px-1">Last name</label>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Last name</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-account-outline text-gray-400 text-lg"></i></div>
-                                        <input type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="Smith"/>
+                                        <input type="text" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="last name" placeholder="Smith"value={formData.lastName} onChange={(e) => updateData("lastName", e.target.value)}/>
                                     </div>
                                 </div>
                             </div>
                             <div className="flex -mx-3">
                                 <div className="w-full px-3 mb-5">
-                                    <label for="" className="text-xs font-semibold px-1">Email</label>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Email</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                                        <input type="email" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="johnsmith@example.com"/>
+                                        <input type="email" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="email" placeholder="johnsmith@example.com" value={formData.email} onChange={(e) => updateData("email", e.target.value)}/>
                                     </div>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-6 -mx-3">
                                 <div className="w-full px-3">
-                                    <label for="" className="text-xs font-semibold px-1">Password</label>
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Password</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-                                        <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************"/>
+                                        <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="password" placeholder="************" value={formData.password} onChange={(e) => updateData("password", e.target.value)}/>
                                     </div>
                                 </div>
-                                <div className="w-full px-3 mb-12">
-                                    <label for="" className="text-xs font-semibold px-1">Retype Password</label>
+                                <div className="w-full px-3">
+                                    <label htmlFor="" className="text-xs font-semibold px-1">Retype Password</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-                                        <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" placeholder="************"/>
+                                        <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="confirm password" placeholder="************" value={formData.confirmPassword} onChange={(e) => updateData("confirmPassword", e.target.value)}/>
                                     </div>
+                                </div>
+                                <div className="w-full px-3 mb-8">
+                                    <button
+                                        className="flex gap-3 items-center justify-center text-xl w-full max-w-xs mx-auto bg-sky-500 hover:bg-sky-700 focus:bg-sky-700 text-white rounded-lg px-3 py-3 font-bold"
+                                        onClick={!formData.walletAddress ? connectWallet : null}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="33" viewBox="0 0 35 33" width="35"><g strokeLinecap="round" strokeLinejoin="round" strokeWidth=".25"><path d="m32.9582 1-13.1341 9.7183 2.4424-5.72731z" fill="#e17726" stroke="#e17726"/><g fill="#e27625" stroke="#e27625"><path d="m2.66296 1 13.01714 9.809-2.3254-5.81802z"/><path d="m28.2295 23.5335-3.4947 5.3386 7.4829 2.0603 2.1436-7.2823z"/><path d="m1.27281 23.6501 2.13055 7.2823 7.46994-2.0603-3.48166-5.3386z"/><path d="m10.4706 14.5149-2.0786 3.1358 7.405.3369-.2469-7.969z"/><path d="m25.1505 14.5149-5.1575-4.58704-.1688 8.05974 7.4049-.3369z"/><path d="m10.8733 28.8721 4.4819-2.1639-3.8583-3.0062z"/><path d="m20.2659 26.7082 4.4689 2.1639-.6105-5.1701z"/></g><path d="m24.7348 28.8721-4.469-2.1639.3638 2.9025-.039 1.231z" fill="#d5bfb2" stroke="#d5bfb2"/><path d="m10.8732 28.8721 4.1572 1.9696-.026-1.231.3508-2.9025z" fill="#d5bfb2" stroke="#d5bfb2"/><path d="m15.1084 21.7842-3.7155-1.0884 2.6243-1.2051z" fill="#233447" stroke="#233447"/><path d="m20.5126 21.7842 1.0913-2.2935 2.6372 1.2051z" fill="#233447" stroke="#233447"/><path d="m10.8733 28.8721.6495-5.3386-4.13117.1167z" fill="#cc6228" stroke="#cc6228"/><path d="m24.0982 23.5335.6366 5.3386 3.4946-5.2219z" fill="#cc6228" stroke="#cc6228"/><path d="m27.2291 17.6507-7.405.3369.6885 3.7966 1.0913-2.2935 2.6372 1.2051z" fill="#cc6228" stroke="#cc6228"/><path d="m11.3929 20.6958 2.6242-1.2051 1.0913 2.2935.6885-3.7966-7.40495-.3369z" fill="#cc6228" stroke="#cc6228"/><path d="m8.392 17.6507 3.1049 6.0513-.1039-3.0062z" fill="#e27525" stroke="#e27525"/><path d="m24.2412 20.6958-.1169 3.0062 3.1049-6.0513z" fill="#e27525" stroke="#e27525"/><path d="m15.797 17.9876-.6886 3.7967.8704 4.4833.1949-5.9087z" fill="#e27525" stroke="#e27525"/><path d="m19.8242 17.9876-.3638 2.3584.1819 5.9216.8704-4.4833z" fill="#e27525" stroke="#e27525"/><path d="m20.5127 21.7842-.8704 4.4834.6236.4406 3.8584-3.0062.1169-3.0062z" fill="#f5841f" stroke="#f5841f"/><path d="m11.3929 20.6958.104 3.0062 3.8583 3.0062.6236-.4406-.8704-4.4834z" fill="#f5841f" stroke="#f5841f"/><path d="m20.5906 30.8417.039-1.231-.3378-.2851h-4.9626l-.3248.2851.026 1.231-4.1572-1.9696 1.4551 1.1921 2.9489 2.0344h5.0536l2.962-2.0344 1.442-1.1921z" fill="#c0ac9d" stroke="#c0ac9d"/><path d="m20.2659 26.7082-.6236-.4406h-3.6635l-.6236.4406-.3508 2.9025.3248-.2851h4.9626l.3378.2851z" fill="#161616" stroke="#161616"/><path d="m33.5168 11.3532 1.1043-5.36447-1.6629-4.98873-12.6923 9.3944 4.8846 4.1205 6.8983 2.0085 1.52-1.7752-.6626-.4795 1.0523-.9588-.8054-.622 1.0523-.8034z" fill="#763e1a" stroke="#763e1a"/><path d="m1 5.98873 1.11724 5.36447-.71451.5313 1.06527.8034-.80545.622 1.05228.9588-.66255.4795 1.51997 1.7752 6.89835-2.0085 4.8846-4.1205-12.69233-9.3944z" fill="#763e1a" stroke="#763e1a"/><path d="m32.0489 16.5234-6.8983-2.0085 2.0786 3.1358-3.1049 6.0513 4.1052-.0519h6.1318z" fill="#f5841f" stroke="#f5841f"/><path d="m10.4705 14.5149-6.89828 2.0085-2.29944 7.1267h6.11883l4.10519.0519-3.10487-6.0513z" fill="#f5841f" stroke="#f5841f"/><path d="m19.8241 17.9876.4417-7.5932 2.0007-5.4034h-8.9119l2.0006 5.4034.4417 7.5932.1689 2.3842.013 5.8958h3.6635l.013-5.8958z" fill="#f5841f" stroke="#f5841f"/></g></svg>
+                                        <span>{ !formData.walletAddress ? "Connect Wallet" : `Connected (${formData.walletAddress.slice(0,6)}...${formData.walletAddress.slice(-4)})`}</span>
+                                    </button>
                                 </div>
                             </div>
                             <div className="flex -mx-3">
                                 <div className="w-full px-3 mb-5">
-                                    <button className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold">REGISTER NOW</button>
+                                    <button
+                                        className="block w-full max-w-xs mx-auto bg-indigo-500 hover:bg-indigo-700 focus:bg-indigo-700 text-white rounded-lg px-3 py-3 font-semibold"
+                                        onClick={register}
+                                    >REGISTER NOW</button>
                                 </div>
                             </div>
                         </div>
