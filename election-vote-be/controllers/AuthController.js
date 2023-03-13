@@ -69,21 +69,40 @@ router.post("/login", async function(req, res) {
 });
 
 router.get("/accessResource", function(req, res) {
-    const token = req.headers.authorization.split('')[1];
-    if (!token) {
+    try {
+        const token = req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(400).json({
+                message: "Error! Token was not provided."
+            });
+        }
+
+        const decodedToken = JWT.verify(token, process.env.SALT);
+        res.status(200).json({
+            success:true,
+            data:{
+                userId:decodedToken.userId,
+                email:decodedToken.email
+            }
+        });
+    } catch(err) {
         res.status(400).json({
-            message: "Error! Token was not provided."
+            message: err.message
         });
     }
-
-    const decodedToken = JWT.verify(token, process.env.SALT);
-    res.status(200).json({
-        success:true,
-        data:{
-            userId:decodedToken.userId,
-            email:decodedToken.email
-        }
-    });
 });
+
+router.get("/fetch-voters", async function (req, res) {
+    try {
+        const voters = await User.findAll();
+        return res.status(200).json({
+            voters
+        });
+    } catch(err) {
+        res.status(200).json({
+            voters: []
+        });
+    }
+})
 
 module.exports = router;
