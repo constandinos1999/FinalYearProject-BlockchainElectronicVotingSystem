@@ -1,12 +1,41 @@
-const ElectionCard = () => {
+import { electionABI } from "@/constants/abi";
+import { useAppContext } from "@/context";
+import axios from "axios";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
+
+const ElectionCard = ({ address }) => {
+
+    const { web3Provider } = useAppContext();
+    const [isLoading, setLoading] = useState(true);
+    const [metaInfo, setMetaInfo] = useState();
+
+    useEffect(() => {
+        async function fetchElectionInfo() {
+            const contract = new web3Provider.eth.Contract(electionABI, address);
+            const metaURI = await contract.methods.election_meta().call();
+            await axios.get(metaURI).then(res => setMetaInfo(res.data)).catch(err => { });
+            setLoading(false);
+        }
+        if (address) fetchElectionInfo();
+    }, [address])
+
     return (
-        <div className="card w-96 bg-base-100 shadow-xl">
-            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="Shoes" /></figure>
+        <div className="card w-96 h-72 bg-base-100 shadow-xl">
             <div className="card-body">
-                <h2 className="card-title">Shoes!</h2>
-                <p>If a dog chews shoes whose shoes does he choose?</p>
+                <h2 className="card-title text-3xl">{ isLoading ? <Skeleton/> : metaInfo.name}</h2>
+                <p>{
+                    isLoading ? (
+                        <>
+                            <Skeleton/>
+                            <Skeleton/>
+                            <Skeleton/>
+                        </>
+                    ) : metaInfo.description
+                }</p>
                 <div className="card-actions justify-end">
-                <button className="btn btn-primary">Buy Now</button>
+                    <Link href={`/admin/election/${address}`} className="btn btn-primary w-full">Manage Election</Link>
                 </div>
             </div>
         </div>
