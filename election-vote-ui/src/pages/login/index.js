@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Store } from "react-notifications-component";
 
@@ -8,6 +9,8 @@ const defaultData = {
 };
 
 const Login = () => {
+
+    const router = useRouter();
 
     const [formData, setFormData] = useState(defaultData);
 
@@ -40,7 +43,8 @@ const Login = () => {
                         duration: 5000,
                         onScreen: true
                     }
-                })
+                });
+                router.replace("/voter");
             }).catch(error => {
                 const { message } = error.response.data;
                 Store.addNotification({
@@ -79,7 +83,7 @@ const Login = () => {
                                     <label htmlFor="" className="text-xs font-semibold px-1">Email</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-email-outline text-gray-400 text-lg"></i></div>
-                                        <input type="email" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="email" placeholder="johnsmith@example.com" onChange={(e) => updateData("email", e.target.value)}/>
+                                        <input type="email" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="email" placeholder="johnsmith@example.com" value={formData.email} onChange={(e) => updateData("email", e.target.value)}/>
                                     </div>
                                 </div>
                             </div>
@@ -88,7 +92,7 @@ const Login = () => {
                                     <label htmlFor="" className="text-xs font-semibold px-1">Password</label>
                                     <div className="flex">
                                         <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i className="mdi mdi-lock-outline text-gray-400 text-lg"></i></div>
-                                        <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="password" placeholder="************" onChange={(e) => updateData("password", e.target.value)}/>
+                                        <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="password" placeholder="************" value={formData.password} onChange={(e) => updateData("password", e.target.value)}/>
                                     </div>
                                 </div>
                             </div>
