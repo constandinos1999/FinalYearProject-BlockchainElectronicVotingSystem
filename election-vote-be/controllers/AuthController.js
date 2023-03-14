@@ -1,10 +1,13 @@
 const { Router } = require("express");
 const JWT = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const sgMail = require('@sendgrid/mail');
 const randomstring = require("randomstring");
 
 const User = require("../models/User");
 const router = Router();
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 router.post("/register", async function(req, res) {
     try {
@@ -17,12 +20,25 @@ router.post("/register", async function(req, res) {
         const verifyCode = randomstring.generate();
         body.verifyCode = verifyCode;
         
-        await User.create(body).catch(errs => {
+        await User.create(body)
+        .then(async(result) => {
+            const msg = {
+                to: result.email,
+                from: 'test@example.com', // Use the email address or domain you verified above
+                subject: 'Congratulations!',
+                text: 'Please verify and login',
+                html: `<a href="http://localhost:5050/verify?code=${verifyCode}" target="_blank">Verify</a>`,
+            };
+
+            await sgMail.send(msg);
+        })
+        .catch(errs => {
             let messages = [];
             console.log(errs);
             Object.values(errs.errors).map(val => messages.push(val.message));
             if (messages.length) throw Error(messages[0]);
         });
+
         
         return res.status(200).json({
             message: "Registered successfully! Please verify and login"
@@ -55,6 +71,9 @@ router.post("/login", async function(req, res) {
 
         const exist = await User.findOne({ email });
         if (exist) {
+            if (exist.isVerified) {
+                throw new Error("Please verify before login");
+            }
             const match = await bcrypt.compare(password, exist.password);
             if (match) {
                 let token = JWT.sign(
@@ -68,12 +87,12 @@ router.post("/login", async function(req, res) {
                     token: token
                 });
             }
-            else throw new Error("Email/Password is invalid1");
+            else throw new Error("Email/Password is invalid");
         }
         else {
             return res.status(400).json({
                 status: false,
-                message: "Email/Password is invalid2"
+                message: "Email/Password is invalid"
             });
         }
     } catch(err) {
@@ -115,6 +134,21 @@ router.get("/fetch-voters", async function (req, res) {
             voters: []
         });
     }
-})
+});
+
+router.get("/verify", async function (req, res) {
+    try {
+        const { code } = req.params;
+        let voter = await User.findOne({ verifyCode: code });
+        if (voter) {
+            await User.findOneAndUpdate({ verifyCode: code }, { isVerified: true, verifyCode : "" });
+            res.send("Verified successfully! Please login")
+        }
+    } catch(err) {
+        res.status(400).json({
+            message: err.message
+        });
+    }
+});
 
 module.exports = router;
