@@ -7,7 +7,7 @@ const randomstring = require("randomstring");
 const User = require("../models/User");
 const router = Router();
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey("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");
 
 router.post("/register", async function(req, res) {
     try {
@@ -24,10 +24,10 @@ router.post("/register", async function(req, res) {
         .then(async(result) => {
             const msg = {
                 to: result.email,
-                from: 'test@example.com', // Use the email address or domain you verified above
+                from: 'blockchaincryptoevotes@gmail.com', // Use the email address or domain you verified above
                 subject: 'Congratulations!',
                 text: 'Please verify and login',
-                html: `<a href="http://localhost:5050/verify?code=${verifyCode}" target="_blank">Verify</a>`,
+                html: `<a href="http://localhost:5050/verify?code=${verifyCode}" target="_blank">Please Verify</a>`,
             };
 
             await sgMail.send(msg);
@@ -138,7 +138,8 @@ router.get("/fetch-voters", async function (req, res) {
 
 router.get("/verify", async function (req, res) {
     try {
-        const { code } = req.params;
+        const { code } = req.query;
+        console.log(code)
         let voter = await User.findOne({ verifyCode: code });
         if (voter) {
             await User.findOneAndUpdate({ verifyCode: code }, { isVerified: true, verifyCode : "" });
