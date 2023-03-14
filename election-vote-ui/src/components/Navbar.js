@@ -27,6 +27,12 @@ const Navbar = () => {
                 ).then(res => {
                     setAuth(true);
                     setProfileInfo(res.data.data);
+                    if (res.data.data.isAdmin) {
+                        if (pathnames[1] == "voter") router.replace("/admin");
+                    }
+                    else {
+                        if (pathnames[1] == "admin") router.replace("/voter");
+                    }
                 }).catch(err => {
                     logout();
                 });
