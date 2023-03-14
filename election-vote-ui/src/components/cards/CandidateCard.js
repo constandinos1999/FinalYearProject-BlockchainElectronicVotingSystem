@@ -5,12 +5,16 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { FaVoteYea } from "react-icons/fa";
+import { Store } from "react-notifications-component";
+import { notification } from "@/constants/notification";
 
 const CandidateCard = ({ index = -1 }) => {
 
     const { query } = useRouter();
-    const { web3Provider, account } = useAppContext();
+    const { web3Provider, account, profileInfo,  } = useAppContext();
     const [isLoading, setLoading] = useState(true);
+    const [isVoting, setVoting] = useState(false);
+    const [isUpdate, setUpdate] = useState(true);
     const [metaInfo, setMetaInfo] = useState("");
     const [voteCount, setVoteCount] = useState(0);
 
@@ -26,18 +30,55 @@ const CandidateCard = ({ index = -1 }) => {
         if (index > -1) {
             fetchCandidateInfo();
         }
-    }, [index])
+    }, [index, isUpdate])
+
+    const vote = async() => {
+        try {
+            if (!account) {
+                Store.addNotification({
+                    ...notification,
+                    type: "warning",
+                    title: "Warning",
+                    message: "Please connect MetaMask"
+                });
+                return;
+            }
+
+            setVoting(true);
+            const contract = new web3Provider.eth.Contract(electionABI, query.address);
+            await contract.methods.vote(index, profileInfo.email).send({
+                from : account
+            });
+            setUpdate(!isUpdate);
+            Store.addNotification({
+                ...notification,
+                type: "success",
+                title: "Success",
+                message: "Voted Successfully!"
+            });
+        } catch(err) {
+            if (err?.code !== 4001) {
+                Store.addNotification({
+                    ...notification,
+                    type: "danger",
+                    title: "Error",
+                    message: "Vote is failed!"
+                });
+            }
+        }
+        setVoting(false);
+    }
 
     return (
         <div className="card w-96 bg-base-100 shadow-xl">
             <figure>
                 {
-                    isLoading ? <Skeleton/> : <img src={metaInfo.image} alt={metaInfo.name} />
+                    isLoading ? <Skeleton className="!w-80 max-w-80" height={300}/> : <img src={metaInfo.image} alt={metaInfo.name} />
                 }
             </figure>
             <div className="card-body">
-                <h2 className="card-title">{isLoading ? <Skeleton/> : metaInfo.name}</h2>
-                <p>{
+                <h2 className="card-title">{isLoading ? <Skeleton className="!w-80 max-w-80" height={30}/> : metaInfo.name}</h2>
+                <p className="h-40">{
                     isLoading ? (
                         <>
                             <Skeleton/>
@@ -51,7 +92,9 @@ const CandidateCard = ({ index = -1 }) => {
                         <FaVoteYea className="w-8 h-8"/>
                         <b className="text-2xl">{voteCount}</b>
                     </div>
-                    <button className="btn btn-primary">Vote</button>
+                    { profileInfo.isAdmin ? "" : (
+                        <button className={`btn btn-primary ${ isVoting ? "loading disabled" : ""}`} onClick={vote}>{ isVoting ? "Voting..." : "Vote"}</button>
+                    ) }
                 </div>
             </div>
         </div>

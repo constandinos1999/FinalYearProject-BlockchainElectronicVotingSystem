@@ -10,7 +10,7 @@ import ConnectWallet from "./ConnectWallet";
 const Navbar = () => {
 
     const router = useRouter();
-    const { isAuth, setAuth } = useAppContext();
+    const { isAuth, setAuth, setProfileInfo, profileInfo } = useAppContext();
 
     useEffect(() => {
         async function checkSession() {
@@ -26,21 +26,25 @@ const Navbar = () => {
                     }
                 ).then(res => {
                     setAuth(true);
+                    setProfileInfo(res.data.data);
                 }).catch(err => {
-                    window.sessionStorage.removeItem("token");
-                    setAuth(false);
-                    router.replace("/");
+                    logout();
                 });
             } catch(err) {
-                window.sessionStorage.removeItem("token");
-                setAuth(false);
-                router.replace("/");
+                logout();
             }
         }
 
         const pathnames = router.pathname.split("/");
         if (pathnames[1] === "admin" || pathnames[1] === "voter") checkSession();
     }, [router]);
+
+    const logout = () => {
+        window.sessionStorage.removeItem("token");
+        setAuth(false);
+        router.replace("/");
+        setProfileInfo({});
+    }
 
     return (
         <div className="navbar bg-base-100 border-b-2 border-gray-300">
@@ -72,13 +76,11 @@ const Navbar = () => {
                                 </label>
                                 <ul tabIndex={0} className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
                                     <li>
-                                    <a className="justify-between">
-                                        Profile
-                                        <span className="badge">New</span>
-                                    </a>
+                                        <a className="justify-between">
+                                            {profileInfo.email}
+                                        </a>
                                     </li>
-                                    <li><a>Settings</a></li>
-                                    <li><a>Logout</a></li>
+                                    <li onClick={logout}><a>Logout</a></li>
                                 </ul>
                             </div>
                         </>

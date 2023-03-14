@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HiUserGroup, HiViewGrid } from "react-icons/hi";
+import { HiViewGrid } from "react-icons/hi";
 
 const VoterSidebar = () => {
     return (
@@ -8,12 +8,6 @@ const VoterSidebar = () => {
                 <HiViewGrid size={48}/>
                 <span className="font-bold mt-1">Elections</span>
             </Link>
-
-            <Link href="/voter/candidates" className="flex flex-col justify-center items-center">
-                <HiUserGroup size={48}/>
-                <span className="font-bold mt-1">Candidates</span>
-            </Link>
-
         </div>
     )
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { HiOutlineGlobe, HiUserGroup, HiViewGrid } from "react-icons/hi";
+import { HiOutlineGlobe, HiViewGrid } from "react-icons/hi";
 
 const AdminSidebar = () => {
     return (

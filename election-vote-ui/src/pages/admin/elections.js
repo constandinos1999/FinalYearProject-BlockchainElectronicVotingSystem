@@ -68,6 +68,13 @@ const Elections = () => {
         }
     }
 
+    const format = () => {
+        setOpenModal(false);
+        setEmail("");
+        setName("");
+        setDescription("");
+    }
+
     return (
         <section className="flex">
             <AdminSidebar/>
@@ -108,7 +115,7 @@ const Elections = () => {
                     </div>
                     <div className="modal-action">
                         <label htmlFor="my-modal" className="btn btn-success text-white" onClick={createElection}>Create</label>
-                        <label htmlFor="my-modal" className="btn btn-error text-white">Cancel</label>
+                        <label htmlFor="my-modal" className="btn btn-error text-white" onClick={format}>Cancel</label>
                     </div>
                 </div>
             </div>

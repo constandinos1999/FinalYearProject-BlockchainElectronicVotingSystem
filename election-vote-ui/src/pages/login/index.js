@@ -1,3 +1,4 @@
+import { notification } from "@/constants/notification";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -32,33 +33,19 @@ const Login = () => {
                 const { message, token } = res.data;
                 window.sessionStorage.setItem("token", token);
                 Store.addNotification({
+                    ...notification,
                     title: "Success",
                     message: message,
-                    type: "success",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 5000,
-                        onScreen: true
-                    }
+                    type: "success"
                 });
                 router.replace("/voter");
             }).catch(error => {
                 const { message } = error.response.data;
                 Store.addNotification({
+                    ...notification,
                     title: "Error",
                     message: message,
                     type: "danger",
-                    insert: "top",
-                    container: "top-right",
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 2000,
-                        onScreen: true
-                    }
                 })
             })
         } catch(err) {
