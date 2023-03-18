@@ -25,8 +25,8 @@ router.post("/register", async function(req, res) {
             const msg = {
                 to: result.email,
                 from: 'blockchaincryptoevotes@gmail.com', // Use the email address or domain you verified above
-                subject: 'Congratulations!',
-                text: 'Please verify and login',
+                subject: 'Email Verification - Blockchain E-Voting Website!',
+                text: 'Please verify your account by clicking here to login',
                 html: `<a href="http://localhost:5050/verify?code=${verifyCode}" target="_blank">Please Verify</a>`,
             };
 
