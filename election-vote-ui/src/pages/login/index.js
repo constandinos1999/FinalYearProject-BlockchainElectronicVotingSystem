@@ -1,4 +1,5 @@
 import { notification } from "@/constants/notification";
+import IMetaMask from "@/icons/IMetaMask";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -20,6 +21,23 @@ const Login = () => {
         _formData[key] = value;
         setFormData(_formData);
     }
+
+    const connectWallet = async() => {
+        try {
+            if (!window.ethereum) {
+                return;
+            }
+
+            const accounts = await window.ethereum.request({
+                method: "eth_requestAccounts"
+            });
+
+            updateData("walletAddress", accounts[0]);
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
 
     const login = async() => {
         try {
@@ -82,7 +100,19 @@ const Login = () => {
                                         <input type="password" className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="password" placeholder="************" value={formData.password} onChange={(e) => updateData("password", e.target.value)}/>
                                     </div>
                                 </div>
+                            
                             </div>
+                            {/* <div className="flex -mx-3">
+                            <div className="w-full px-3 mb-8">
+                                    <button
+                                        className="flex gap-3 items-center justify-center text-xl w-full max-w-xs mx-auto bg-sky-500 hover:bg-sky-700 focus:bg-sky-700 text-white rounded-lg px-3 py-3 font-bold"
+                                        onClick={!formData.walletAddress ? connectWallet : null}
+                                    >
+                                        <IMetaMask/>
+                                        <span>{ !formData.walletAddress ? "Connect Wallet" : `Connected (${formData.walletAddress.slice(0,6)}...${formData.walletAddress.slice(-4)})`}</span>
+                                    </button>
+                                </div>
+                            </div> */}
                             <div className="flex -mx-3">
                                 <div className="w-full px-3 mb-5">
                                     <button

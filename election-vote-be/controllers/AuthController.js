@@ -13,9 +13,9 @@ router.post("/register", async function(req, res) {
     try {
         let body = req.body;
         
-        if (body.email.toLowerCase() === "blockchaincryptoevotes@gmail.com") {
-            throw Error("Already existing User");
-        }
+        // if (body.email.toLowerCase() === "blockchaincryptoevotes@gmail.com") {
+        //     throw Error("Already existing User");
+        // }
 
         const verifyCode = randomstring.generate();
         body.verifyCode = verifyCode;
@@ -27,7 +27,7 @@ router.post("/register", async function(req, res) {
                 from: 'blockchaincryptoevotes@gmail.com', // Use the email address or domain you verified above
                 subject: 'Email Verification - Blockchain E-Voting Website!',
                 text: 'Please verify your account by clicking here to login',
-                html: `<a href="http://localhost:5050/verify?code=${verifyCode}" target="_blank">Please Verify</a>`,
+                html: `<a href="http://localhost:3001/verify?code=${verifyCode}" target="_blank">Please Verify</a>`,
             };
 
             await sgMail.send(msg);
@@ -53,9 +53,9 @@ router.post("/register", async function(req, res) {
 router.post("/login", async function(req, res) {
     try {
         let { email, password } = req.body;
-
+        const exist = await User.findOne({ email });
         if (email == "blockchaincryptoevotes@gmail.com") {
-            if (password == "AJVDcfuiinsoiygjnnn5678!vbjkgh!?asdAfgVs") {
+            if (password == "cryptoevotes123") {
                 let token = JWT.sign(
                     { id: exist.id, email: exist.email, walletAddress: exist.walletAddress, isAdmin: true },
                     process.env.SALT,
@@ -63,13 +63,13 @@ router.post("/login", async function(req, res) {
                 );
                 return res.status(200).json({
                     status: true,
-                    message: "Logged in successfully!",
+                    message: "Admin Logged in successfully!",
                     token: token
                 });
             }
         }
 
-        const exist = await User.findOne({ email });
+     
         if (exist) {
             if (exist.isVerified) {
                 throw new Error("Please verify before login");
