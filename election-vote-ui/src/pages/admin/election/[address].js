@@ -93,7 +93,7 @@ const Candidates = () => {
                                 electionImage ? <img src={URL.createObjectURL(electionImage)} alt="election image" className="w-full"/> :
                                 <div className="py-12">
                                     <p className="mb-3 font-semibold text-gray-900 flex flex-wrap justify-center">
-                                        <span>Select Election Image</span>
+                                        <span>Select Candidate Image</span>
                                     </p>
                                     <label
                                         htmlFor="election-photo"
@@ -109,7 +109,7 @@ const Candidates = () => {
                     <div className="w-full px-8 mb-5">
                         <label htmlFor="" className="text-xs font-semibold px-1">Name</label>
                         <div className="flex">
-                            <input type="text" className="w-full p-3 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="name" placeholder="Election Name" value={name} onChange={(e) => setName(e.target.value)}/>
+                            <input type="text" className="w-full p-3 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500" name="name" placeholder="Candidate Name" value={name} onChange={(e) => setName(e.target.value)}/>
                         </div>
                     </div>
                     <div className="w-full px-8 mb-5">
