@@ -100,12 +100,13 @@ abstract contract Ownable is Context {
 
 contract ElectionFactory is Ownable {
     
+    event RemovedElection(string indexed email, address indexed election);
     event CreatedElection(string indexed email, address indexed election);
     mapping(string => address) elections;
     
 
     function createElection(string memory email, string memory metadata) external onlyOwner {
-        require(elections[email] != address(0), "already existing election");
+        require(elections[email] == address(0), "already existing election");
 
         address newElection = address(new Election(msg.sender, email, metadata));
         elections[email] = newElection;
@@ -113,6 +114,15 @@ contract ElectionFactory is Ownable {
         emit CreatedElection(email, newElection);
     }
 
+    function removeElection(string memory email) external onlyOwner{
+         require(elections[email] != address(0), "election does not exist");
+        address contractToRemove = elections[email];
+       (bool success,) = contractToRemove.delegatecall(abi.encodeWithSignature("destroy()"));
+        require(success, "Failed to call destroy function");
+        delete elections[email];
+        emit RemovedElection(email, contractToRemove);
+    }
+    
 }
 
 contract Election {
@@ -139,6 +149,7 @@ contract Election {
     //candidate election_description
 
     struct Candidate {
+        uint8 candidateID;
         string email;
         string metadata;
         uint8 voteCount;
@@ -170,8 +181,15 @@ contract Election {
     //function to add candidate to mapping
 
     function addCandidate(string memory email, string memory meta) public owner {
-        uint8 candidateID = numCandidates++; //assign id of the candidate
-        candidates[candidateID] = Candidate({ email: email, metadata: meta, voteCount: 0 }); //add the values to the mapping
+        uint8 _candidateID = numCandidates++; //assign id of the candidate
+        candidates[_candidateID] = Candidate({candidateID: _candidateID, email: email, metadata: meta, voteCount: 0 }); //add the values to the mapping
+    }
+
+    //function to remove canidate from the mapping
+
+    function removeCandidate(uint8 _candidateID) external owner{
+        require( _candidateID <= numCandidates, "Invalid candidate ID");
+        delete candidates[_candidateID];
     }
     //function to vote and check for double voting
 
@@ -200,8 +218,8 @@ contract Election {
 
     //function to get candidate information
 
-    function getCandidate(uint8 candidateID) public view returns (string memory, string memory, uint8) {
-        return (candidates[candidateID].email, candidates[candidateID].metadata, candidates[candidateID].voteCount);
+    function getCandidate(uint8 _candidateID) public view returns (uint8,string memory, string memory, uint8) {
+        return (candidates[_candidateID].candidateID, candidates[_candidateID].email, candidates[_candidateID].metadata, candidates[_candidateID].voteCount);
     } 
 
     //function to return winner candidate information
@@ -218,4 +236,7 @@ contract Election {
         return (candidateID);
     }
     
+    function destroy() public owner{
+        selfdestruct(payable(election_authority));
+        }
 }
