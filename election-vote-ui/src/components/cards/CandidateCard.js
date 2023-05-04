@@ -8,6 +8,7 @@ import { FaVoteYea } from "react-icons/fa";
 import { Store } from "react-notifications-component";
 import { notification } from "@/constants/notification";
 import { title } from "process";
+import { title } from "process";
 
 const CandidateCard = ({ index = -1 }) => {
   const { query } = useRouter();
@@ -25,16 +26,16 @@ const CandidateCard = ({ index = -1 }) => {
         query.address
       );
       const info = await contract.methods.getCandidate(index).call();
-      console.log("INFOOO",info)
+      console.log("INFOOO", info);
       const _metaInfo = await axios
         .get(info[2])
         .then((res) => {
           return res.data;
         })
         .catch((err) => {
-          console.log(err)
+          console.log(err);
         });
-        console.log("METAAA:",_metaInfo)
+      console.log("METAAA:", _metaInfo);
       setVoteCount(info[3]);
       setMetaInfo(_metaInfo);
       setLoading(false);
@@ -46,10 +47,9 @@ const CandidateCard = ({ index = -1 }) => {
 
   //   const [txHash,setTxHash] = useState()
 
-  
-  const CustomNotification = ({txHash}) => {
+  const CustomNotification = ({ txHash }) => {
     const [visible, setVisible] = useState(true);
-    console.log("txhash here:", txHash)
+    console.log("txhash here:", txHash);
     useEffect(() => {
       const timeout = setTimeout(() => {
         setVisible(false);
@@ -84,41 +84,20 @@ const CandidateCard = ({ index = -1 }) => {
       }
 
       setVoting(true);
-          const contract = new web3Provider.eth.Contract(electionABI, query.address);
-          await contract.methods.vote(index, profileInfo.email).send({
-              from : account
-          }, (error, transactionHash) => {
-          if (!error) {
-            try {
-              Store.addNotification({
-                container: "center",
-                      content:  (
-                  <div className="bg-green-300 border flex flex-col justify-center items-center text-center border-green-300 p-3 rounded shadow-md">
-                          <h2 className="text-4xl   font-bold">Voted Successfully Casted</h2>
-                  </div>
-                ),
-                    type:'success',
-                animationIn: ["animate__animated", "animate__fadeIn"],
-                animationOut: ["animate__animated", "animate__fadeOut"],
-                dismiss: {
-                  duration: 3000,
-                },
-              });
-              Store.addNotification({
-                     container:'bottom-right',
-                content: <CustomNotification txHash={transactionHash} />,
-                               
-              });
-            } catch (err) {
-              console.log(`notification error ${err}`);
-            }
-            //   setTxHash(transactionHash);
-            //   console.log("txhash:", setTxHash)
-          }
-
+      const contract = new web3Provider.eth.Contract(
+        electionABI,
+        query.address
+      );
+      await contract.methods.vote(index, profileInfo.email).send({
+        from: account,
       });
       setUpdate(!isUpdate);
-     
+      Store.addNotification({
+        ...notification,
+        type: "success",
+        title: "Success",
+        message: "Voted Successfully!",
+      });
     } catch (err) {
       if (err?.code !== 4001) {
         Store.addNotification({
