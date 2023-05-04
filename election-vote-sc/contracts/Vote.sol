@@ -102,7 +102,7 @@ contract ElectionFactory is Ownable {
     
     event RemovedElection(string indexed email, address indexed election);
     event CreatedElection(string indexed email, address indexed election);
-    mapping(string => address) elections;
+    mapping(string => address) public elections;
     
 
     function createElection(string memory email, string memory metadata) external onlyOwner {

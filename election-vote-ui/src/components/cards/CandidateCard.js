@@ -25,13 +25,17 @@ const CandidateCard = ({ index = -1 }) => {
         query.address
       );
       const info = await contract.methods.getCandidate(index).call();
+      console.log("INFOOO",info)
       const _metaInfo = await axios
-        .get(info[1])
+        .get(info[2])
         .then((res) => {
           return res.data;
         })
-        .catch((err) => {});
-      setVoteCount(info[2]);
+        .catch((err) => {
+          console.log(err)
+        });
+        console.log("METAAA:",_metaInfo)
+      setVoteCount(info[3]);
       setMetaInfo(_metaInfo);
       setLoading(false);
     }
@@ -40,24 +44,24 @@ const CandidateCard = ({ index = -1 }) => {
     }
   }, [index, isUpdate]);
 
-//   const [txHash,setTxHash] = useState()
+  //   const [txHash,setTxHash] = useState()
 
   
   const CustomNotification = ({txHash}) => {
     const [visible, setVisible] = useState(true);
     console.log("txhash here:", txHash)
     useEffect(() => {
-        const timeout = setTimeout(() => {
-          setVisible(false);
-        }, 10000);
-    
-        return () => clearTimeout(timeout);
-      }, []);
-      const handleClick = () => {
-        window.open(`https://testnet.bscscan.com/tx/${txHash}`, "_blank");
+      const timeout = setTimeout(() => {
         setVisible(false);
-      };
-   
+      }, 10000);
+
+      return () => clearTimeout(timeout);
+    }, []);
+    const handleClick = () => {
+      window.open(`https://testnet.bscscan.com/tx/${txHash}`, "_blank");
+      setVisible(false);
+    };
+
     return visible ? (
       <div
         className="bg-white border text-left flex flex-row justify-center items-center border-gray-300 p-3 rounded shadow-md"
@@ -84,33 +88,33 @@ const CandidateCard = ({ index = -1 }) => {
           await contract.methods.vote(index, profileInfo.email).send({
               from : account
           }, (error, transactionHash) => {
-              if (!error) {
-                try {
-                    Store.addNotification({
-                      container: "center",
+          if (!error) {
+            try {
+              Store.addNotification({
+                container: "center",
                       content:  (
-                        <div className="bg-green-300 border flex flex-col justify-center items-center text-center border-green-300 p-3 rounded shadow-md">
+                  <div className="bg-green-300 border flex flex-col justify-center items-center text-center border-green-300 p-3 rounded shadow-md">
                           <h2 className="text-4xl   font-bold">Voted Successfully Casted</h2>
-                        </div>
-                    ),
+                  </div>
+                ),
                     type:'success',
-                    animationIn: ["animate__animated", "animate__fadeIn"],
-                    animationOut: ["animate__animated", "animate__fadeOut"],
-                    dismiss: {
-                        duration: 3000,
-                      },
-                    });
-                    Store.addNotification({
+                animationIn: ["animate__animated", "animate__fadeIn"],
+                animationOut: ["animate__animated", "animate__fadeOut"],
+                dismiss: {
+                  duration: 3000,
+                },
+              });
+              Store.addNotification({
                      container:'bottom-right',
-                      content: <CustomNotification txHash={transactionHash} />,
+                content: <CustomNotification txHash={transactionHash} />,
                                
-                    });
-                  } catch (err) {
-                    console.log(`notification error ${err}`);
-                  }
-                //   setTxHash(transactionHash);
-                //   console.log("txhash:", setTxHash)
-              }
+              });
+            } catch (err) {
+              console.log(`notification error ${err}`);
+            }
+            //   setTxHash(transactionHash);
+            //   console.log("txhash:", setTxHash)
+          }
 
       });
       setUpdate(!isUpdate);
