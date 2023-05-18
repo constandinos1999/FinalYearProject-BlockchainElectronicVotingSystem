@@ -8,7 +8,6 @@ import { FaVoteYea } from "react-icons/fa";
 import { Store } from "react-notifications-component";
 import { notification } from "@/constants/notification";
 import { title } from "process";
-import { title } from "process";
 
 const CandidateCard = ({ index = -1 }) => {
   const { query } = useRouter();
