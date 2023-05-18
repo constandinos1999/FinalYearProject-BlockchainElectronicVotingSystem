@@ -53,7 +53,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="navbar bg-base-100 border-b-2 border-gray-300">
+        <div className="navbar bg-slate-900 border-b-2 border-slate-900">
             <div className="flex-1">
                 <Link href="/">
                     <Image
@@ -68,8 +68,8 @@ const Navbar = () => {
                 {
                     !isAuth ? (
                         <>
-                            <Link href="/login" className="btn btn-outline btn-accent">Sign In</Link>
-                            <Link href="/register" className="btn btn-outline btn-secondary">Sign Up</Link>
+                            <Link href="/login" className="btn btn-primary">Sign In</Link>
+                            <Link href="/register" className="btn btn-primary">Sign Up</Link>
                         </>
                     ) : (
                         <>

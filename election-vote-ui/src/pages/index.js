@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-const slides = [1, 2, 3, 4];
+const slides = [1];
 
 export default function Home() {
   return (
@@ -35,7 +35,6 @@ export default function Home() {
                 <SwiperSlide data-hash={`slide${idx}`} key={idx}>
                   <figure className="relative flex justify-center">
                     <img src={`/img/slide/${idx}.jpg`} alt="slide" className="slide-image"/>
-                    <figcaption className="absolute top-1/2 text-gray-600 text-[70px] font-bold">Crypto E-Vote</figcaption>
                   </figure>
                 </SwiperSlide>
               )
