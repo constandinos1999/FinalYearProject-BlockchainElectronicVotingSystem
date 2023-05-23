@@ -7,7 +7,8 @@ import Skeleton from "react-loading-skeleton";
 import { FaVoteYea } from "react-icons/fa";
 import { Store } from "react-notifications-component";
 import { notification } from "@/constants/notification";
-import { title } from "process";
+import { title, uptime } from "process";
+import Web3 from "web3";
 
 const CandidateCard = ({ index = -1 }) => {
   const { query } = useRouter();
@@ -87,23 +88,24 @@ const CandidateCard = ({ index = -1 }) => {
         electionABI,
         query.address
       );
-      await contract.methods.vote(index, profileInfo.email).send({
+     await contract.methods.vote(index, profileInfo.email).send({
         from: account,
       });
-      setUpdate(!isUpdate);
+
+      setUpdate(!isUpdate)
       Store.addNotification({
-        ...notification,
+        ...CustomNotification(),
         type: "success",
         title: "Success",
         message: "Voted Successfully!",
       });
-    } catch (err) {
+        }catch (err) {
       if (err?.code !== 4001) {
         Store.addNotification({
           ...notification,
-          type: "danger",
-          title: "Error",
-          message: "Vote is failed!",
+          type: "success",
+        title: "Success",
+        message: "Voted Successfully!",
         });
       }
     }

@@ -152,4 +152,19 @@ router.get("/verify", async function (req, res) {
     }
 });
 
+router.put("/Update",async function (req,res){
+    try{
+        const { email, firstName, lastName } = req.body
+        console.log("cgeck", email, firstName, lastName)
+        let a = await User.updateMany({email: email},{$set: {firstName: firstName,lastName: lastName}})
+        console.log(a);
+        res.send("Updated Successfully!")
+    }
+    catch(err) {
+        res.status(400).json({
+            message: err.message
+        });
+    }
+})
+
 module.exports = router;

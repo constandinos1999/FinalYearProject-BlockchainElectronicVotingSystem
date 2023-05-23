@@ -3,15 +3,15 @@ require("@nomicfoundation/hardhat-toolbox");
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   etherscan: {
-    apiKey: "5Z1RRTM3R1VF8U9BS6DVBZZEACU5XUN59Q"
+    apiKey: "X5JJ9ETK5Z4XIDYH123EKFZ3ZJVBJWBWJI"
   },
   networks: {
-    goerli: {
-      url: "https://goerli.infura.io/v3/9278c04944064d5a8f9ad13e549e550c",
-      accounts: {
-        mnemonic: "ankle crawl train lens forget nasty enforce blame mesh exotic random drill"
-      }
-    }
+    binance: {
+      url: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+      gasPrice: 20000000000,
+      chainId: 97,
+      accounts:  [`0xbd4116a09b9a4fd47d62f3311ff20f012e49e60fa950da2dd2a58469c6cd7881`]
+    },
   },
   solidity: {
     version: "0.8.18",

@@ -8,11 +8,6 @@ import { Web3Storage } from "web3.storage";
 
 const Elections = () => {
 
-    const { factoryContract, account } = useAppContext();
-    const [openModal, setOpenModal] = useState(false);
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
 
     const [elections, setElections] = useState([]);
 

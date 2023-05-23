@@ -7,7 +7,7 @@
 const hre = require("hardhat");
 
 async function main() {
-  const ElectionFact = await hre.ethers.getContractFactory("ElectionFact");
+  const ElectionFact = await hre.ethers.getContractFactory("ElectionFactory");
   const electionFact = await ElectionFact.deploy();
 
   await electionFact.deployed();

@@ -5,12 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import TestModals from "./Modal";
 import ConnectWallet from "./ConnectWallet";
 
 const Navbar = () => {
 
     const router = useRouter();
     const { isAuth, setAuth, setProfileInfo, profileInfo } = useAppContext();
+
 
     useEffect(() => {
         async function checkSession() {
@@ -52,6 +54,10 @@ const Navbar = () => {
         setProfileInfo({});
     }
 
+    const EditProfile = () => {
+
+    }
+
     return (
         <div className="navbar bg-slate-900 border-b-2 border-slate-900">
             <div className="flex-1">
@@ -74,6 +80,7 @@ const Navbar = () => {
                     ) : (
                         <>
                             <ConnectWallet/>
+                            <TestModals />
                             <div className="dropdown dropdown-end">
                                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                     <div className="w-24 rounded-full">

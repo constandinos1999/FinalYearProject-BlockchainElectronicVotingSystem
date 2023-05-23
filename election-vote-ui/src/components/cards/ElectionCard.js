@@ -1,4 +1,5 @@
 import { electionABI } from "@/constants/abi";
+import { factoryAddress } from "@/constants/address";
 import { useAppContext } from "@/context";
 import axios from "axios";
 import Link from "next/link";
@@ -8,7 +9,7 @@ import Skeleton from "react-loading-skeleton";
 
 const ElectionCard = ({ address }) => {
 
-    const { web3Provider, profileInfo } = useAppContext();
+    const {web3Provider, profileInfo } = useAppContext();
     const [isLoading, setLoading] = useState(true);
     const [metaInfo, setMetaInfo] = useState();
     const [voterNum, setVoterNum] = useState(0);
@@ -16,7 +17,7 @@ const ElectionCard = ({ address }) => {
 
     useEffect(() => {
         async function fetchElectionInfo() {
-            const contract = new web3Provider.eth.Contract(electionABI, address);
+            const contract = new web3Provider.eth.Contract(electionABI, factoryAddress);
             const metaURI = await contract.methods.election_meta().call();
             const voters = await contract.methods.getNumOfVoters().call();
             const candidates = await contract.methods.getNumOfCandidates().call();
@@ -25,8 +26,8 @@ const ElectionCard = ({ address }) => {
             setVoterNum(voters);
             setCandiNum(candidates);
         }
-        if (address) fetchElectionInfo();
-    }, [address])
+        if (factoryAddress) fetchElectionInfo();
+    }, [factoryAddress])
 
     return (
         <div className="card w-96 min-h-72 bg-base-100 shadow-xl">

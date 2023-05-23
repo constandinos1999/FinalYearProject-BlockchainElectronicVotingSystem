@@ -16,6 +16,7 @@ const Elections = () => {
   const [removeElectionModal, setRemoveElectionModal] = useState(false);
   const [elections, setElections] = useState([]);
 
+
   useEffect(() => {
     fetchElections();
   }, []);
@@ -46,21 +47,23 @@ const Elections = () => {
     }
   };
 
-//   const removeElection = async () => {
-//     try {
-//         if (!removeEmail) {
-//             return;
-//           }
-//           await factoryContract.methods
-//           .removeElection(removeEmail)
-//           .send({
-//             from: account,
-//           });
+  // const removeElection = async () => {
+  //   console.log("remove",removeElection)
+  //   try {
+  //       if (!removeEmail) {
+  //           return;
+  //         }
+  //         await factoryContract.methods
+  //         .removeElection(removeEmail)
+  //         .send({
+  //           from: account,
+  //         });
 
-//     } catch (err) {
-//         console.log(err);
-//     }
-//   };
+  //   } catch (err) {
+  //       console.log(err);
+  //   }
+  // };
+
   const fetchElections = async () => {
     try {
       await axios
@@ -191,8 +194,8 @@ const Elections = () => {
           </div>
         </div>
       </div>
-
-      {/* <input
+{/* 
+      <input
         type="checkbox"
         id="remove-election-modal"
         className="modal-toggle"
@@ -218,7 +221,7 @@ const Elections = () => {
               />
             </div>
           </div>
-          <div className="modal-action">
+          <div className="modal-action">  
             <label
               htmlFor="my-modal"
               className="btn btn-error  text-white"

@@ -29,11 +29,14 @@ const Voters = () => {
             <AdminSidebar/>
             <main className="ml-24 p-5 w-full">
                 <div className="flex gap-4 mt-5">
-                    {
-                        voters.map((item, idx) => (
-                            <VoterCard key={idx} data={item}/>
-                        ))
-                    }
+                    {voters.map((item, idx) => (
+                        item.firstName == 'Admin' ? (<VoterCard key={idx} data={item}/>):''
+                    ))}
+                </div>
+                <div className="flex gap-4 mt-5">
+                    {voters.map((item, idx) => (
+                        item.firstName !== 'Admin' ? (<VoterCard key={idx} data={item}/>):''
+                    ))}
                 </div>
             </main>
         </section>
