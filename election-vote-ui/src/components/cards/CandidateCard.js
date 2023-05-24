@@ -156,7 +156,8 @@ const CandidateCard = ({ index = -1 }) => {
             >
               {isVoting ? "Voting..." : "Vote"}
             </button>
-          )}
+          )} 
+          {/* <CustomNotification/> */}
         </div>
       </div>
     </div>
