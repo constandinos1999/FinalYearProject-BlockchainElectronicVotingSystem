@@ -50,7 +50,7 @@ npx hardhat run scripts/deploy.js --network binance
 
 Running the next command will verify the smart contract on BscScan. 
 
-The '**contactaddress**' below indicates that the contact address given from running the previous command should be pasted here.
+The '**contractaddress**' below indicates that the contract address given from running the previous command should be pasted here.
 
 ```
 npx hardhat verify --network binance *contractaddress*  
