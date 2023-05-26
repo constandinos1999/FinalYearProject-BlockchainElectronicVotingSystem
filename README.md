@@ -1,4 +1,5 @@
-# Crypto E-Vote: A blockchain e-voting dApp
+## Crypto E-Vote: A blockchain e-voting dApp
+-----
 
 This project is developed at the University of Brighton by Constantine Kotsis. It is a final year software artefact that pertains to the fulfilment of the final year thesis per an undergraduate degree in BSc Computer Science (Hons).
 
@@ -9,7 +10,7 @@ The dApp is developed to tailor to subject specific elections for computer scien
 An admin account has been created to maintain and use the dApp to create new elections and add new candidates. The admin and voters pay using their cryptocurrency wallet in line with smart contracts to faciliate the creation of elections, addition of candidates and casting of votes respectively.
 
 ## Prerequisites to Starting the dApp
-#
+-----
 
 - npm and Node are used within this system and relevant installations of both are required for the dApp to run.
 
@@ -20,7 +21,7 @@ An admin account has been created to maintain and use the dApp to create new ele
 - BscScan is the blockchain explorer for the Binance Smart Chain and where the blockchain network is found and where the smart contracts are deployed. Smart contracts and voter transactions are seen on the TestNet side of the explorer.
 
 ## Starting and Running the Live dApp Server
-#
+----- 
 
 The dApp is run locally in the terminal in the IDE.
 
@@ -83,5 +84,5 @@ and wait for the whole thing to be loaded.
 The dApp will then load and can be accessed from **localhost:3000** displayed in the terminal in the **'election-vote-ui'** directory after running ***npm start***.
 
 ## Further Development
-#
+
 ***It is important to note that test tokens (tBNB) are primarily used with the system through the BNB faucet to cast votes in elections and for the admin to create elections and add candidates. This will need to be changed in the future to enable other cryptocurrencies to be used in conjunction with the dApp. In addition, the dApp will need further development but is currently working as a simple prototype. All future developments will involve further enhancements such as code refactoring and changing and improving relevant features. It currently works as a simple prototype for a final year project.***
