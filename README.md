@@ -10,7 +10,9 @@ An admin account has been created to maintain and use the dApp to create new ele
 
 ## Prerequisites to Starting the dApp
 
-- npm and Node are used within this system and relevant installations of both are required for the dApp to run.
+- npm and Node are used within this system and relevant installations of both are required for the dApp to run. The documentation for downloading and installing both is found [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
+
+- Hardhat for Visual Studio Code is the official Hardhat extension that adds advanced support for Solidity to VSCode. It is used in the dApp for smart contracts and the local installation instructions can be found [here](https://hardhat.org/hardhat-runner/docs/getting-started).
 
 - MetaMask is the software cryptocurrency wallet used to interact with the blockchain. It needs to be downloaded and added as an extension on the Chrome browser to be initialised alongisde the dApp. The link to the MetaMask extension can be added [here](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn). It facilitates the importing and creation of cryptocurrency wallets for the admin and voters.
 
