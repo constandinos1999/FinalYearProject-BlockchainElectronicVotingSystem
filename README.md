@@ -1,5 +1,4 @@
 ## Crypto E-Vote: A blockchain e-voting dApp
------
 
 This project is developed at the University of Brighton by Constantine Kotsis. It is a final year software artefact that pertains to the fulfilment of the final year thesis per an undergraduate degree in BSc Computer Science (Hons).
 
@@ -10,7 +9,6 @@ The dApp is developed to tailor to subject specific elections for computer scien
 An admin account has been created to maintain and use the dApp to create new elections and add new candidates. The admin and voters pay using their cryptocurrency wallet in line with smart contracts to faciliate the creation of elections, addition of candidates and casting of votes respectively.
 
 ## Prerequisites to Starting the dApp
------
 
 - npm and Node are used within this system and relevant installations of both are required for the dApp to run.
 
@@ -21,7 +19,6 @@ An admin account has been created to maintain and use the dApp to create new ele
 - BscScan is the blockchain explorer for the Binance Smart Chain and where the blockchain network is found and where the smart contracts are deployed. Smart contracts and voter transactions are seen on the TestNet side of the explorer.
 
 ## Starting and Running the Live dApp Server
------ 
 
 The dApp is run locally in the terminal in the IDE.
 
