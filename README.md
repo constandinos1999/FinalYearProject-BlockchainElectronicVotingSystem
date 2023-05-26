@@ -56,7 +56,7 @@ The '**contractaddress**' below indicates that the contract address given from r
 npx hardhat verify --network binance *contractaddress*  
 ```
 
-To integrate contract in application go to the election-vote-ui directory and then go to:
+To integrate contract in application go to the **'election-vote-ui'** directory and then go to:
 
 **src→constants→address.js**
 
